@@ -1,15 +1,18 @@
 <template>
   <div id="app">
-    <Showblogs></Showblogs>
+    <!-- <Showblogs></Showblogs> -->
+    <BlogHeader></BlogHeader>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import Showblogs from './components/showBlogs'
+import BlogHeader from './components/header'
 export default {
   name: 'app',
   components:{
-    Showblogs
+    Showblogs,BlogHeader
   },
   data () {
     return {
