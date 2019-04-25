@@ -1,15 +1,8 @@
-<!--  111-->
+<!--  -->
 <template>
   <div>
-    <label for>搜索</label>
-    <input type="text" v-model="search">
-    <div v-for="(item,index) in filteredBlogs">
-      <router-link :to="'/blog/' + item.id">
-        <h1 v-rainbow @click="showDetails(item)">{{item.title | uppercase}}</h1>
-      </router-link>
-
-      <p>{{item.body | snippet}}</p>
-    </div>
+      <h1>{{title}}</h1>
+      <div>{{body}}</div>
   </div>
 </template>
 
@@ -27,57 +20,32 @@ export default {
     //2、懒加载
     //组件名称1: resolve => {require(['组件名称1.vue'], resolve);}
   },
-  directives: {
-    //自定义指令
-    rainbow: {
-      bind(el, binding, vnode) {
-        el.style.color =
-          "#" +
-          Math.random()
-            .toString(16)
-            .slice(2, 8);
-      }
-    }
-  },
-  filters: {
-    //过滤器
-    uppercase: function(value) {
-      return value.toUpperCase();
-    }
-  },
   data() {
     return {
-      dataList: [],
-      search: ""
       //这里存放数据
+      id:this.$route.params.id,
+      blog:{},
+      title:"",
+        body:"",
     };
   },
   computed: {
-    //计算属性 类似于data概念
-    filteredBlogs: function() {
-      return this.dataList.filter(e => {
-        return e.title.match(this.search);
-      });
-    }
+    //监听属性 类似于data概念
   },
   watch: {
     //监控data中的数据变化
   },
   methods: {
     //方法集合
-    showDetails: function(item) {
-      alert(item.id);
-    }
   },
   beforeCreate() {}, //生命周期 - 组件实例化之前执行的函数
   created() {
-    this.$http
-      .get("http://jsonplaceholder.typicode.com/posts")
-      .then(function(data) {
-        console.log(data);
-        this.dataList = data.body;
-        this.dataList = this.dataList.slice(0, 10);
-      });
+      this.$http.get("http://jsonplaceholder.typicode.com/posts/" + this.id  )
+      .then(function (params) {
+          console.log(params);
+          this.title = params.body.title;
+          this.body = params.body.body;
+      })
   }, //生命周期 - 组件实例化完毕，但页面还未显示（可以访问当前this实例）
   beforeMount() {}, //生命周期 - 组件挂载前，页面仍未显示，但虚拟DOM已经OK
   mounted() {}, //生命周期 - 挂载完成，此方法执行后页面内容显示（可以访问DOM元素）
