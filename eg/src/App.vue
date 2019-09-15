@@ -1,38 +1,43 @@
 <template>
   <div id="app">
     <!-- <Showblogs></Showblogs> -->
-    <BlogHeader></BlogHeader>
-    <router-view></router-view>
+    <!-- <BlogHeader></BlogHeader>
+    <router-view></router-view> -->
+    <test></test>
   </div>
 </template>
 
 <script>
-import Showblogs from './components/showBlogs'
-import BlogHeader from './components/header'
+import Showblogs from "./components/showBlogs";
+import BlogHeader from "./components/header";
+import test from "./components/test";
 export default {
-  name: 'app',
-  components:{
-    Showblogs,BlogHeader
+  name: "app",
+  components: {
+    Showblogs,
+    BlogHeader,
+    test
   },
-  data () {
+  data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
-    }
+      msg: "Welcome to Your Vue.js App"
+    };
   }
-}
+};
 </script>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.draggDiv{
+  width: 20vw;
+  height: 20vw;
+  background: {
+    color: red;
+  }
 }
 
-h1, h2 {
+
+h1,
+h2 {
   font-weight: normal;
 }
 

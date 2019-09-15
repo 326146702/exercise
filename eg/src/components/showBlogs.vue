@@ -65,9 +65,9 @@ export default {
   },
   methods: {
     //方法集合
-    showDetails: function(item) {
-      alert(item.id);
-    }
+    // showDetails: function(item) {
+    //   alert(item.id);
+    // }
   },
   beforeCreate() {}, //生命周期 - 组件实例化之前执行的函数
   created() {
