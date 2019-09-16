@@ -30,7 +30,7 @@ export default {
 .draggDiv{
   width: 20vw;
   height: 20vw;
-  background: {
+  background-color: {
     color: red;
   }
 }
