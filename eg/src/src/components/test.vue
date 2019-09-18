@@ -44,7 +44,7 @@
 					<div style="width:16px;height:16px;" slot="reference" class="add_text_button"></div>
 				</el-popover><!--添加文字-->
 
-				<div id="redo" style="width:16px;height:16px;" class="refresh" @click="redoEvent"></div><!--全部重做-->
+				<div style="width:16px;height:16px;" class="refresh" @click="clearAll"></div><!--全部重做-->
 
 				<el-tooltip class="item" effect="dark" content="删除元素" placement="bottom-start">
 					<div style="width:16px;height:16px;" class="deleteSelect" @click="deleteSelect"></div><!--删除选中图层-->
@@ -166,7 +166,6 @@ methods: {
 		fabric.util.loadImage('../src/assets/QQ20190913-000717@2x.png', function (img) {
 			_self.object = new fabric.Image(img);
 			_self.object.set({
-				borderColor: 'red',
 				// left: 100,
         		// top: 100,
 				// scaleX: card.width / img.width,
@@ -281,11 +280,7 @@ methods: {
             canvas_crop.renderAll();
             fabric.Image.fromURL(canvas_crop.toDataURL('png'), function(croppedImg) {
                 croppedImg.set('left', left);
-				croppedImg.set('top', top);
-				//下一步是底图的特殊处理，判断是否是底图，然后在新的图层上添加红色边框，禁止剪裁动作
-				if(_self.objectCut.hasOwnProperty("borderColor")&&_self.objectCut.borderColor == "red"){
-					croppedImg.set('borderColor', 'red');
-				}
+                croppedImg.set('top', top);
                 _self.cardPublic.add(croppedImg).renderAll();
             });
         });
@@ -386,18 +381,9 @@ methods: {
 		if(!selectObj){
 			alert('请先点击选择元素');
 			return;
-		}else{
-			if(selectObj.hasOwnProperty("borderColor")&&selectObj.borderColor == "red"){
-				this.$message({
-					type: 'warning',
-					message: '底图不可删除!'
-				});
-			}else{
-				this.cardPublic.remove(selectObj) // 传入需要移除的object
-				this.cardPublic.renderAll()
-			}
 		}
-		
+		this.cardPublic.remove(selectObj) // 传入需要移除的object
+		this.cardPublic.renderAll()
 	},
 	//初始化记录画图状态为撤销操作准备
 	canvasDataChange(){
@@ -457,23 +443,16 @@ methods: {
 						});
 					}
 					else if(_self.config.currentStateIndex == 0){
-						if(_self.cardPublic._objects.length == 1){
-							_self.$message({
-								type: 'warning',
-								message: '无可撤销动作!'
-							});
-						}else{
-							_self.cardPublic.clear();
-							_self.config.undoFinishedStatus = 1;
-							_self.config.currentStateIndex -= 1;
-						}
+						_self.cardPublic.clear();
+						_self.config.undoFinishedStatus = 1;
+						_self.config.currentStateIndex -= 1;
 					}
 				}
 			}
 		}
 	},
 	//清除所有添加的对象
-	redoEvent(){
+	clearAll(){
 		// this.cardPublic._objects.length = 0 ;
 		// for(let i = 0; i < this.cardPublic._objects.length;){
 		// 	this.cardPublic.remove(this.obj_Pub['textbox' + (this.cardPublic._objects.length)]);
@@ -483,32 +462,6 @@ methods: {
 		this.num = 1;//对象名称编号回归1
 		this._self.textLocation_top = 50;//文字对象位置还原
 		this.cardPublic.renderAll();
-
-
-    //   let _self = this;
-    //   if(this.config.redoFinishedStatus){
-    //     if((this.config.currentStateIndex == this.config.canvasState.length-1) && this.config.currentStateIndex != -1){
-    //       // this.config.redoButton.disabled= true;
-    //     }else{
-    //       if(this.config.canvasState.length > this.config.currentStateIndex && this.config.canvasState.length != 0){
-    //               this.config.redoFinishedStatus = 0;
-    //               this.config.redoStatus = true;
-    //               this.cardPublic.loadFromJSON(this.config.canvasState[this.config.currentStateIndex+1],function(){
-    //                   var jsonData = JSON.parse(_self.config.canvasState[_self.config.currentStateIndex+1]);
-    //                   _self.cardPublic.renderAll();
-    //                   _self.config.redoStatus = false;
-    //                   _self.config.currentStateIndex += 1;
-    //                   if(_self.config.currentStateIndex != -1){
-    //                   //    _self.config.redoButton.disabled = false;
-    //                   }
-    //                   _self.config.redoFinishedStatus = 1;
-    //                   if((_self.config.currentStateIndex == _self.config.canvasState.length-1) && _self.config.currentStateIndex != -1){
-    //                       // _self.config.redoButton.disabled= true;
-    //                   }
-    //         });
-    //       }
-    //     }
-    //   }
 	}
 	
 },
